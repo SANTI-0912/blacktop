@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root { height: 100%; }
+  body {
+    @apply bg-ink text-bone font-body antialiased;
+    /* Minimalist arena: mostly flat black, a faint spotlight from above and
+       a restrained red glow low in the frame — restraint over glow. */
+    background-image:
+      radial-gradient(120% 60% at 50% -10%, rgba(255,255,255,0.04), transparent 60%),
+      radial-gradient(90% 50% at 50% 110%, rgba(227,30,36,0.08), transparent 60%);
+    background-attachment: fixed;
+  }
+  :focus-visible { outline: 2px solid #E31E24; outline-offset: 2px; }
+}
+
+@layer components {
+  .eyebrow {
+    @apply font-display uppercase tracking-[0.2em] text-[11px] text-mute;
+  }
+  .stat-num { @apply font-data tabular-nums; }
+  .card {
+    @apply border border-line bg-court/70 rounded-sm;
+  }
+  .btn {
+    @apply w-full text-left px-4 py-3 border border-line rounded-sm bg-court/60
+           transition-colors duration-150 hover:border-amber/70 hover:bg-court
+           active:scale-[0.995];
+  }
+  .btn-primary {
+    @apply w-full font-display uppercase tracking-[0.14em] text-lg py-3 rounded-sm
+           bg-amber text-ink transition-transform duration-150 hover:brightness-110 active:scale-[0.99];
+  }
+}
+
+/* Screen entrance — one orchestrated move, not scattered effects. */
+@keyframes riseIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.rise { animation: riseIn .32s cubic-bezier(.2,.7,.2,1) both; }
+.rise-1 { animation-delay: .05s }
+.rise-2 { animation-delay: .11s }
+.rise-3 { animation-delay: .17s }
+
+@keyframes flash { 0%,100% { opacity: 0 } 12% { opacity: .5 } }
+.flash { animation: flash .5s ease-out both; }
+
+/* A soft pulsing glow behind a celebration screen's award icon — the one
+   piece of new visual language this plan adds, reused identically across
+   every grand-award reveal rather than styled per award. */
+@keyframes glowPulse { 0%, 100% { opacity: .6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.08); } }
+.celebration-glow { position: relative; display: inline-flex; }
+.celebration-glow::before {
+  content: "";
+  position: absolute;
+  inset: -40px;
+  background: radial-gradient(circle, rgba(227,30,36,0.35), transparent 70%);
+  animation: glowPulse 2.2s ease-in-out infinite;
+  z-index: -1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
